@@ -39,8 +39,8 @@ def get_user_input(msg, parser, is_valid, parser_error, validator_error) -> str:
                 return parsed_input
             else:
                 print(f"{validator_error}")
-        except Exception as e:
-            print(f"{parser_error}: {e}")
+        except Exception:
+            print(f"{parser_error}")
 
 
 def request_user_name():
