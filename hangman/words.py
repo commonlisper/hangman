@@ -1,9 +1,9 @@
 import random
-import pics
+import state
 
 MASKED_SYMBOL = "-"
 MIN_WORD_LEN = 4
-MAX_WORD_LEN = len(pics.HANGMAN_STATE)
+MAX_WORD_LEN = len(state.HANGMAN_STATE)
 
 
 def get_random_word(filepath: str) -> str:
@@ -18,9 +18,9 @@ def get_random_word(filepath: str) -> str:
     return word
 
 
-def get_masked_word(target_word: str, entered_chars: list[str]) -> str:
+def make_masked_word(target_word: str, entered_letters: list[str]) -> str:
     masked_word = "".join(
-        [char if char in entered_chars else MASKED_SYMBOL for char in target_word]
+        [char if char in entered_letters else MASKED_SYMBOL for char in target_word]
     )
 
     return masked_word

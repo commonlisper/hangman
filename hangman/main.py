@@ -1,10 +1,9 @@
-from decimal import Clamped
 import os
 import words
-import pics
+import state
 
 
-ATTEMPTS = len(pics.HANGMAN_STATE)
+ATTEMPTS = len(state.HANGMAN_STATE)
 WORDS_FILE_NAME = "nounlist.txt"
 
 
@@ -25,7 +24,7 @@ def show_game_status(
 Your word is => {player_word}
 Letters you've guessed => {guessed_letters}
 
-{pics.HANGMAN_STATE[attempt_count - 1]}\n"""
+{state.HANGMAN_STATE[attempt_count - 1]}\n"""
     )
 
 
@@ -65,26 +64,25 @@ def request_user_letter(guessed_letters: list[str]):
     )
 
 
-def get_guessed_chars(random_word: str, entered_chars: list[str]) -> list[str]:
-    guessed_chars = [ch for ch in random_word if ch in entered_chars]
-    return guessed_chars
+def get_guessed_letters(target_word: str, entered_letters: list[str]) -> list[str]:
+    return [ch for ch in target_word if ch in entered_letters]
 
 
 def show_user_statistic(
-    attempt_count: int, entered_chars: list[str], player_word: str, random_word: str
+    attempt_count: int, entered_letters: list[str], target_word: str, user_word: str
 ):
-    guessed_chars = get_guessed_chars(random_word, entered_chars)
-    placeholder = "-" * (35 + len(entered_chars * 3))
+    guessed_letters = get_guessed_letters(target_word, entered_letters)
+    placeholder = "-" * (35 + len(entered_letters * 3))
 
     print(
         f"""
 Your statictics:
 {placeholder}
-| The guess word was =>         {random_word}
+| The guess word was =>         {target_word}
 | The number of attempts was => {attempt_count}
-| Entered letters =>            {", ".join(entered_chars)}
-| Your word =>                  {player_word}
-| Guessed letters =>            {", ".join(guessed_chars)}
+| Entered letters =>            {", ".join(entered_letters)}
+| Your word =>                  {user_word}
+| Guessed letters =>            {", ".join(guessed_letters)}
 {placeholder}
 """
     )
@@ -97,9 +95,10 @@ def show_goodbye_message():
 def game():
     show_welcome_message()
     while True:
-        target_word = words.get_random_word(f"{os.getcwd()}{os.sep}{WORDS_FILE_NAME}")
+        filepath = f"{os.getcwd()}{os.sep}{WORDS_FILE_NAME}"
+        target_word = words.get_random_word(filepath)
         entered_letters = []
-        guessed_word = words.get_masked_word(target_word, entered_letters)
+        guessed_word = words.make_masked_word(target_word, entered_letters)
         attempt_count = 1
 
         while guessed_word != target_word and attempt_count <= ATTEMPTS:
@@ -107,7 +106,7 @@ def game():
 
             input_letter = request_user_letter(entered_letters)
             entered_letters.append(input_letter)
-            guessed_word = words.get_masked_word(target_word, entered_letters)
+            guessed_word = words.make_masked_word(target_word, entered_letters)
 
             if input_letter not in target_word:
                 if attempt_count == ATTEMPTS:
@@ -120,9 +119,9 @@ def game():
         elif attempt_count == ATTEMPTS:
             print("\nYou lost by running out of tries. :(")
 
-        show_user_statistic(attempt_count, entered_letters, guessed_word, target_word)
+        show_user_statistic(attempt_count, entered_letters, target_word, guessed_word)
 
-        if input("Do you want one more game? y/n").lower()[0] == "n":
+        if input("Do you want one more game? y/n ").lower()[0] == "n":
             show_goodbye_message()
             break
 
