@@ -64,6 +64,16 @@ def request_user_letter(guessed_letters: list[str]):
     )
 
 
+def request_user_answer():
+    return get_user_input(
+        "Do you want one more game? y/n ",
+        lambda input_line: input_line[0],
+        lambda parsed_input: parsed_input.isalpha() and parsed_input in ("y", "n"),
+        "Enter only one symbol",
+        "The symbol must be in `y` or `n`",
+    )
+
+
 def get_guessed_letters(target_word: str, entered_letters: list[str]) -> list[str]:
     return [ch for ch in target_word if ch in entered_letters]
 
@@ -121,7 +131,7 @@ def game():
 
         show_user_statistic(attempt_count, entered_letters, target_word, guessed_word)
 
-        if input("Do you want one more game? y/n ").lower()[0] == "n":
+        if request_user_answer().startswith("n"):
             show_goodbye_message()
             break
 
