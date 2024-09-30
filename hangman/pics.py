@@ -1,4 +1,4 @@
-FRAME = [
+HANGMAN_STATE = [
     """
   +---+
   |   |

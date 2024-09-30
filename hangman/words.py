@@ -3,7 +3,7 @@ import pics
 
 MASKED_SYMBOL = "-"
 MIN_WORD_LEN = 4
-MAX_WORD_LEN = len(pics.FRAME)
+MAX_WORD_LEN = len(pics.HANGMAN_STATE)
 
 
 def get_random_word(filepath: str) -> str:

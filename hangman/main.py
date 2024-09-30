@@ -2,7 +2,7 @@ import os
 import words
 import pics
 
-ATTEMPTS = len(pics.FRAME)
+ATTEMPTS = len(pics.HANGMAN_STATE)
 WORDS_FILE_NAME = "nounlist.txt"
 
 
@@ -16,30 +16,30 @@ The game lasts until you guess the word or until there are attempts left.
 
 
 def show_game_status(
-    attempt_count: int, player_word: str, guess_chars: list[str]
+    attempt_count: int, player_word: str, guessed_letters: list[str]
 ) -> None:
     print(
         f"""\nAttempt №{attempt_count}
 Your word is => {player_word}
-Letters you've guessed => {guess_chars}
+Letters you've guessed => {guessed_letters}
 
-{pics.FRAME[attempt_count - 1]}\n"""
+{pics.HANGMAN_STATE[attempt_count - 1]}\n"""
     )
 
 
-def get_user_input(guess_chars: list[str]) -> str:
+def get_user_input(guessed_chars: list[str]) -> str:
     while True:
-        in_char = input("Please, enter the character: ")[0]
+        input_char = input("Please, enter the character: ")[0]
 
-        if not in_char.isalpha():
+        if not input_char.isalpha():
             print("Enter a character, not something else")
             continue
 
-        if in_char in guess_chars:
+        if input_char in guessed_chars:
             print("That's the symbol you've already guessed, try another.")
             continue
 
-        return in_char
+        return input_char
 
 
 def get_guessed_chars(random_word: str, entered_chars: list[str]) -> list[str]:
@@ -47,7 +47,7 @@ def get_guessed_chars(random_word: str, entered_chars: list[str]) -> list[str]:
     return guessed_chars
 
 
-def show_user_statistics(
+def show_user_statistic(
     attempt_count: int, entered_chars: list[str], player_word: str, random_word: str
 ):
     guessed_chars = get_guessed_chars(random_word, entered_chars)
@@ -73,7 +73,6 @@ def show_goodbye_message():
 
 def game():
     show_welcome_message()
-    game_count = 0
     while True:
         target_word = words.get_random_word(f"{os.getcwd()}{os.sep}{WORDS_FILE_NAME}")
         entered_chars = []
@@ -98,7 +97,7 @@ def game():
         elif attempt_count == ATTEMPTS:
             print("\nYou lost by running out of tries. :(")
 
-        show_user_statistics(attempt_count, entered_chars, guessed_word, target_word)
+        show_user_statistic(attempt_count, entered_chars, guessed_word, target_word)
 
         if input("Do you want one more game? y/n").lower()[0] == "n":
             show_goodbye_message()
