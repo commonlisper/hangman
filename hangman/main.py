@@ -1,6 +1,8 @@
+from decimal import Clamped
 import os
 import words
 import pics
+
 
 ATTEMPTS = len(pics.HANGMAN_STATE)
 WORDS_FILE_NAME = "nounlist.txt"
@@ -27,19 +29,40 @@ Letters you've guessed => {guessed_letters}
     )
 
 
-def get_user_input(guessed_chars: list[str]) -> str:
+def get_user_input(msg, parser, is_valid, parser_error, validator_error) -> str:
     while True:
-        input_char = input("Please, enter the character: ")[0]
+        user_input = input(f"{msg}: ")
 
-        if not input_char.isalpha():
-            print("Enter a character, not something else")
-            continue
+        try:
+            parsed_input = parser(user_input)
 
-        if input_char in guessed_chars:
-            print("That's the symbol you've already guessed, try another.")
-            continue
+            if is_valid(parsed_input):
+                return parsed_input
+            else:
+                print(f"{validator_error}")
+        except Exception as e:
+            print(f"{parser_error}: {e}")
 
-        return input_char
+
+def request_user_name():
+    return get_user_input(
+        "Enter user name",
+        lambda input_line: input_line,
+        lambda parsed_input: len(parsed_input) > 3 and parsed_input.isalpha(),
+        "Enter a valid user name",
+        "The name must be longer than 3 char and contain alphabetic characters",
+    )
+
+
+def request_user_letter(guessed_letters: list[str]):
+    return get_user_input(
+        "Enter your letter",
+        lambda input_line: input_line[0],
+        lambda parsed_input: parsed_input.isalpha()
+        and parsed_input not in guessed_letters,
+        "Enter one symbol, please",
+        "The letter must be a alphabetic letter and must not have been entered before",
+    )
 
 
 def get_guessed_chars(random_word: str, entered_chars: list[str]) -> list[str]:
@@ -75,18 +98,18 @@ def game():
     show_welcome_message()
     while True:
         target_word = words.get_random_word(f"{os.getcwd()}{os.sep}{WORDS_FILE_NAME}")
-        entered_chars = []
-        guessed_word = words.get_masked_word(target_word, entered_chars)
+        entered_letters = []
+        guessed_word = words.get_masked_word(target_word, entered_letters)
         attempt_count = 1
 
         while guessed_word != target_word and attempt_count <= ATTEMPTS:
-            show_game_status(attempt_count, guessed_word, entered_chars)
+            show_game_status(attempt_count, guessed_word, entered_letters)
 
-            input_char = get_user_input(entered_chars)
-            entered_chars.append(input_char)
-            guessed_word = words.get_masked_word(target_word, entered_chars)
+            input_letter = request_user_letter(entered_letters)
+            entered_letters.append(input_letter)
+            guessed_word = words.get_masked_word(target_word, entered_letters)
 
-            if input_char not in target_word:
+            if input_letter not in target_word:
                 if attempt_count == ATTEMPTS:
                     break
 
@@ -97,7 +120,7 @@ def game():
         elif attempt_count == ATTEMPTS:
             print("\nYou lost by running out of tries. :(")
 
-        show_user_statistic(attempt_count, entered_chars, guessed_word, target_word)
+        show_user_statistic(attempt_count, entered_letters, guessed_word, target_word)
 
         if input("Do you want one more game? y/n").lower()[0] == "n":
             show_goodbye_message()
