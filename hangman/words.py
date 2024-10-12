@@ -3,7 +3,7 @@ import state
 
 MASKED_SYMBOL = "-"
 MIN_WORD_LEN = 4
-MAX_WORD_LEN = len(state.HANGMAN_STATE)
+MAX_WORD_LEN = len(state.HANGMAN_STATE) + 2
 
 
 def get_random_word(filepath: str) -> str:
@@ -20,7 +20,9 @@ def get_random_word(filepath: str) -> str:
 
 def make_masked_word(target_word: str, entered_letters: list[str]) -> str:
     masked_word = "".join(
-        [char if char in entered_letters else MASKED_SYMBOL for char in target_word]
+        [letter
+         if letter in entered_letters else MASKED_SYMBOL
+         for letter in target_word]
     )
 
     return masked_word
