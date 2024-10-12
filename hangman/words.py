@@ -14,15 +14,16 @@ def get_random_word(filepath: str) -> str:
             if len(w := line.strip()) > MIN_WORD_LEN and len(w) <= MAX_WORD_LEN
         ]
 
-    word = words[random.randint(0, len(words))]
+    word = random.choice(words)
     return word
 
 
 def make_masked_word(target_word: str, entered_letters: list[str]) -> str:
     masked_word = "".join(
-        [letter
-         if letter in entered_letters else MASKED_SYMBOL
-         for letter in target_word]
+        [
+            letter if letter in entered_letters else MASKED_SYMBOL
+            for letter in target_word
+        ]
     )
 
     return masked_word
