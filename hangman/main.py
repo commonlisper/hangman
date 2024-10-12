@@ -1,7 +1,7 @@
 import os
 import words
 import state
-
+from ValidationException import ValidationException
 
 ATTEMPTS = len(state.HANGMAN_STATE)
 WORDS_FILE_NAME = "nounlist.txt"
@@ -17,11 +17,11 @@ The game lasts until you guess the word or until there are attempts left.
 
 
 def show_game_status(
-    attempt_count: int, player_word: str, guessed_letters: list[str]
+    attempt_count: int, guessed_word: str, guessed_letters: list[str]
 ) -> None:
     print(
         f"""\nAttempt №{attempt_count}
-Your word is => {player_word}
+Your word is => {guessed_word}
 Letters you've guessed => {guessed_letters}
 
 {state.HANGMAN_STATE[attempt_count - 1]}\n"""
@@ -38,19 +38,11 @@ def get_user_input(msg, parser, is_valid, parser_error, validator_error) -> str:
             if is_valid(parsed_input):
                 return parsed_input
             else:
-                print(f"{validator_error}")
+                raise ValidationException(f"{validator_error}")
+        except ValidationException as ex:
+            print(f"{ex}")
         except Exception:
             print(f"{parser_error}")
-
-
-def request_user_name():
-    return get_user_input(
-        "Enter user name",
-        lambda input_line: input_line,
-        lambda parsed_input: len(parsed_input) > 3 and parsed_input.isalpha(),
-        "Enter a valid user name",
-        "The name must be longer than 3 char and contain alphabetic characters",
-    )
 
 
 def request_user_letter(guessed_letters: list[str]):
@@ -79,19 +71,22 @@ def get_guessed_letters(target_word: str, entered_letters: list[str]) -> list[st
 
 
 def show_user_statistic(
-    attempt_count: int, entered_letters: list[str], target_word: str, user_word: str
+    word: str,
+    guessed_word: str,
+    entered_letters: list[str],
+    attempts_count,
 ):
-    guessed_letters = get_guessed_letters(target_word, entered_letters)
+    guessed_letters = get_guessed_letters(word, entered_letters)
     placeholder = "-" * (35 + len(entered_letters * 3))
 
     print(
         f"""
 Your statictics:
 {placeholder}
-| The guess word was =>         {target_word}
-| The number of attempts was => {attempt_count}
+| The guess word was =>         {word}
+| The number of attempts was => {attempts_count}
 | Entered letters =>            {", ".join(entered_letters)}
-| Your word =>                  {user_word}
+| Your word =>                  {guessed_word}
 | Guessed letters =>            {", ".join(guessed_letters)}
 {placeholder}
 """
@@ -106,30 +101,30 @@ def game():
     show_welcome_message()
     while True:
         filepath = f"{os.getcwd()}{os.sep}{WORDS_FILE_NAME}"
-        target_word = words.get_random_word(filepath)
+        word = words.get_random_word(filepath)
         entered_letters = []
-        guessed_word = words.make_masked_word(target_word, entered_letters)
-        attempt_count = 1
+        guessed_word = words.make_masked_word(word, entered_letters)
+        attempts_count = 1
 
-        while guessed_word != target_word and attempt_count <= ATTEMPTS:
-            show_game_status(attempt_count, guessed_word, entered_letters)
+        while guessed_word != word and attempts_count <= ATTEMPTS:
+            show_game_status(attempts_count, guessed_word, entered_letters)
 
             input_letter = request_user_letter(entered_letters)
             entered_letters.append(input_letter)
-            guessed_word = words.make_masked_word(target_word, entered_letters)
+            guessed_word = words.make_masked_word(word, entered_letters)
 
-            if input_letter not in target_word:
-                if attempt_count == ATTEMPTS:
+            if input_letter not in word:
+                if attempts_count == ATTEMPTS:
                     break
 
-                attempt_count += 1
+                attempts_count += 1
 
-        if target_word == guessed_word:
+        if word == guessed_word:
             print("\nYou won the game! Congratulation! :)")
-        elif attempt_count == ATTEMPTS:
+        elif attempts_count == ATTEMPTS:
             print("\nYou lost by running out of tries. :(")
 
-        show_user_statistic(attempt_count, entered_letters, target_word, guessed_word)
+        show_user_statistic(word, guessed_word, entered_letters, attempts_count)
 
         if request_user_answer().startswith("n"):
             show_goodbye_message()
