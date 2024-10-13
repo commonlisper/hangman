@@ -30,7 +30,7 @@ def _get_user_input(
 def request_user_letter(guessed_letters: list[str]) -> str:
     return _get_user_input(
         "Enter your letter",
-        lambda input_line: input_line[0],
+        lambda input_line: input_line[0].lower(),
         lambda parsed_input: parsed_input.isalpha()
         and parsed_input not in guessed_letters,
         "Enter one symbol, please",
@@ -41,7 +41,7 @@ def request_user_letter(guessed_letters: list[str]) -> str:
 def request_user_answer() -> str:
     return _get_user_input(
         "Do you want one more game? y/n ",
-        lambda input_line: input_line[0],
+        lambda input_line: input_line[0].lower(),
         lambda parsed_input: parsed_input.isalpha() and parsed_input in ("y", "n"),
         "Enter only one symbol",
         "The symbol must be in `y` or `n`",
