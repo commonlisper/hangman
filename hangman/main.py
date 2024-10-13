@@ -6,7 +6,7 @@ import words
 
 
 def start_game() -> None:
-    attempts = len(state.HANGMAN_STATE)
+    attempts = len(state.HANGMAN_STATE) - 1
     words_file = "nounlist.txt"
     masked_letter = "-"
     min_word_len = 4
