@@ -1,7 +1,6 @@
 import os
 import words
 import state
-import messages
 import cui
 
 
@@ -12,7 +11,7 @@ def game():
     min_word_len = 4
     max_word_len = len(state.HANGMAN_STATE) + 2
 
-    messages.show_welcome_message(attempts)
+    cui.show_welcome_message(attempts)
 
     while True:
         filepath = f"{os.getcwd()}{os.sep}{words_file}"
@@ -42,7 +41,7 @@ def game():
         cui.show_user_statistic(word, guessed_word, entered_letters, attempts_count)
 
         if cui.request_user_answer().startswith("n"):
-            messages.show_goodbye_message()
+            cui.show_goodbye_message()
             break
 
 
