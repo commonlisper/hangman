@@ -81,18 +81,17 @@ def show_user_statistic(
 
 
 def show_win_message() -> None:
-    print("\nYou won the game! Congratulation! :)")
+    print("\nYou won the game! Congratulation! :)\n")
 
 
 def show_lost_message() -> None:
     print("\nYou lost by running out of tries. :(")
+    print(f"{state.HANGMAN_STATE[-1]}\n")
 
 
 def show_welcome_message(attempts_count: int) -> None:
     print("Welcome to hangman game!")
-    print(
-        f"You must guess all letters in random word. Attemt count is {attempts_count}."
-    )
+    print(f"You must guess all letters in random word. Attemt count is {attempts_count}.")
     print("The game lasts until you guess the word or until there are attempts left.")
 
 
