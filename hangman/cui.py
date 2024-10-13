@@ -84,3 +84,11 @@ Your statictics:
 {placeholder}
 """
     )
+
+
+def show_win_message() -> None:
+    print("\nYou won the game! Congratulation! :)")
+
+
+def show_lost_message() -> None:
+    print("\nYou lost by running out of tries. :(")
