@@ -1,7 +1,8 @@
 import os
-import words
-import state
+
 import cui
+import state
+import words
 
 
 def game():

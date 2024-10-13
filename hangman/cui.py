@@ -1,6 +1,7 @@
 from typing import Callable
-from ValidationException import ValidationException
+
 import state
+from validation_exception import ValidationException
 
 
 def _get_user_input(
