@@ -8,14 +8,17 @@ import cui
 def game():
     attempts = len(state.HANGMAN_STATE)
     words_file = "nounlist.txt"
+    masked_letter = "-"
+    min_word_len = 4
+    max_word_len = len(state.HANGMAN_STATE) + 2
 
     messages.show_welcome_message(attempts)
 
     while True:
         filepath = f"{os.getcwd()}{os.sep}{words_file}"
-        word = words.get_random_word(filepath)
+        word = words.get_random_word(filepath, min_word_len, max_word_len)
         entered_letters = []
-        guessed_word = words.make_masked_word(word, entered_letters)
+        guessed_word = words.make_masked_word(word, entered_letters, masked_letter)
         attempts_count = 1
 
         while guessed_word != word and attempts_count <= attempts:
@@ -23,7 +26,7 @@ def game():
 
             input_letter = cui.request_user_letter(entered_letters)
             entered_letters.append(input_letter)
-            guessed_word = words.make_masked_word(word, entered_letters)
+            guessed_word = words.make_masked_word(word, entered_letters, masked_letter)
 
             if input_letter not in word:
                 if attempts_count == attempts:
