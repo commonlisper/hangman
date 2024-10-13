@@ -5,7 +5,7 @@ import state
 import words
 
 
-def start_game():
+def start_game() -> None:
     attempts = len(state.HANGMAN_STATE)
     words_file = "nounlist.txt"
     masked_letter = "-"
@@ -17,7 +17,7 @@ def start_game():
     while True:
         filepath = f"{os.getcwd()}{os.sep}{words_file}"
         word = words.get_random_word(filepath, min_word_len, max_word_len)
-        entered_letters = []
+        entered_letters: list[str] = []
         guessed_word = words.make_masked_word(word, entered_letters, masked_letter)
         attempts_count = 1
 
