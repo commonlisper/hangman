@@ -5,7 +5,7 @@ import state
 import words
 
 
-def game():
+def start_game():
     attempts = len(state.HANGMAN_STATE)
     words_file = "nounlist.txt"
     masked_letter = "-"
@@ -47,4 +47,4 @@ def game():
 
 
 if __name__ == "__main__":
-    game()
+    start_game()
