@@ -51,13 +51,10 @@ def request_user_answer() -> str:
 def show_game_status(
     attempt_count: int, guessed_word: str, guessed_letters: list[str]
 ) -> None:
-    print(
-        f"""\nAttempt №{attempt_count}
-Your word is => {guessed_word}
-Letters you've guessed => {guessed_letters}
-
-{state.HANGMAN_STATE[attempt_count - 1]}\n"""
-    )
+    print(f"\nAttempt №{attempt_count}")
+    print(f"Your word is => {guessed_word}")
+    print(f"Letters you've guessed => {guessed_letters}")
+    print(f"{state.HANGMAN_STATE[attempt_count - 1]}\n")
 
 
 def _get_guessed_letters(target_word: str, entered_letters: list[str]) -> list[str]:
@@ -73,18 +70,14 @@ def show_user_statistic(
     guessed_letters = _get_guessed_letters(word, entered_letters)
     placeholder = "-" * (35 + len(entered_letters * 3))
 
-    print(
-        f"""
-Your statictics:
-{placeholder}
-| The guess word was =>         {word}
-| The number of attempts was => {attempts_count}
-| Entered letters =>            {", ".join(entered_letters)}
-| Your word =>                  {guessed_word}
-| Guessed letters =>            {", ".join(guessed_letters)}
-{placeholder}
-"""
-    )
+    print("Your statictics:")
+    print(placeholder)
+    print(f"| The guess word was =>         {word}")
+    print(f"| The number of attempts was => {attempts_count}")
+    print(f"| Entered letters =>            {", ".join(entered_letters)}")
+    print(f"| Your word =>                  {guessed_word}")
+    print(f"| Guessed letters =>            {", ".join(guessed_letters)}")
+    print(placeholder)
 
 
 def show_win_message() -> None:
@@ -96,12 +89,11 @@ def show_lost_message() -> None:
 
 
 def show_welcome_message(attempts_count: int) -> None:
-    msg = f"""Welcome to hangman game!
-You must guess all letters in random word. Attemt count is {attempts_count}.
-The game lasts until you guess the word or until there are attempts left.
-"""
-
-    print(msg)
+    print("Welcome to hangman game!")
+    print(
+        f"You must guess all letters in random word. Attemt count is {attempts_count}."
+    )
+    print("The game lasts until you guess the word or until there are attempts left.")
 
 
 def show_goodbye_message() -> None:
