@@ -4,7 +4,7 @@ import state
 from validation_exception import ValidationException
 
 
-def _get_user_input(
+def _handle_user_input(
     input_message: str,
     parser: Callable[[str], str],
     is_valid: Callable[[str], bool],
@@ -28,7 +28,7 @@ def _get_user_input(
 
 
 def request_user_letter(guessed_letters: list[str]) -> str:
-    return _get_user_input(
+    return _handle_user_input(
         "Enter your letter",
         lambda input_line: input_line[0].lower(),
         lambda parsed_input: parsed_input.isalpha()
@@ -39,7 +39,7 @@ def request_user_letter(guessed_letters: list[str]) -> str:
 
 
 def request_user_answer() -> str:
-    return _get_user_input(
+    return _handle_user_input(
         "Do you want one more game? y/n ",
         lambda input_line: input_line[0].lower(),
         lambda parsed_input: parsed_input.isalpha() and parsed_input in ("y", "n"),
