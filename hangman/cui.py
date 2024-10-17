@@ -31,8 +31,7 @@ def request_user_letter(guessed_letters: list[str]) -> str:
     return _handle_user_input(
         "Enter your letter",
         lambda input_line: input_line[0].lower(),
-        lambda parsed_input: parsed_input.isalpha()
-        and parsed_input not in guessed_letters,
+        lambda parsed_input: parsed_input.isalpha() and parsed_input not in guessed_letters,
         "Enter one symbol, please",
         "The letter must be a alphabetic letter and must not have been entered before",
     )
@@ -48,9 +47,7 @@ def request_user_answer() -> str:
     )
 
 
-def show_game_status(
-    attempt_count: int, guessed_word: str, guessed_letters: list[str]
-) -> None:
+def show_game_status(attempt_count: int, guessed_word: str, guessed_letters: list[str]) -> None:
     print(f"\nAttempt №{attempt_count}")
     print(f"Your word is => {guessed_word}")
     print(f"Letters you've guessed => {guessed_letters}")
