@@ -16,7 +16,7 @@ def run_game_loop() -> None:
     cui.show_welcome_message(attempts)
 
     while True:
-        filepath = f"{os.getcwd()}{os.sep}{words_file}"
+        filepath = f"{os.path.dirname(os.path.abspath(__file__))}{os.sep}{words_file}"
         word = words.get_random_word(filepath, min_word_len, max_word_len)
         entered_letters: list[str] = []
 
@@ -29,7 +29,7 @@ def run_game_loop() -> None:
 
         cui.show_user_statistic(word, guessed_word, entered_letters, attempts_count)
 
-        if cui.request_user_answer() == Answer.NO.value:
+        if cui.process_user_answer() == Answer.NO.value:
             cui.show_goodbye_message()
             break
 
@@ -46,7 +46,7 @@ def play_game_session(
     while guessed_word != word and attempts_count <= attempts:
         cui.show_game_status(attempts_count, guessed_word, entered_letters)
 
-        input_letter = cui.request_user_letter(entered_letters)
+        input_letter = cui.process_user_letter(entered_letters)
         entered_letters.append(input_letter)
         guessed_word = words.make_masked_word(word, entered_letters, masked_letter)
 

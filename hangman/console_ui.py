@@ -2,50 +2,64 @@ import state
 from answer import Answer
 
 
-def request_user_letter(guessed_letters: list[str]) -> str:
+def process_user_letter(guessed_letters: list[str]) -> str:
     while True:
-        user_input = input("Enter your letter: ").lower()
+        user_input = get_user_input("Enter your letter: ")
+        is_valid = validate_user_letter(user_input, guessed_letters)
 
-        if len(user_input) > 1:
-            print("Enter onle one symbol, please")
-            continue
-
-        if not user_input.isascii():
-            print("The letter must be in Latin alphabet")
-            continue
-
-        if not user_input.isalpha():
-            print("The letter must be a alphabetic letter")
-            continue
-
-        if user_input in guessed_letters:
-            print("The letter must not have been entered before")
-            continue
-
-        return user_input
+        if is_valid:
+            return user_input
 
 
-def request_user_answer() -> str:
+def get_user_input(msg: str) -> str:
+    return input(msg).lower()
+
+
+def validate_user_letter(letter: str, guessed_letters: list[str]) -> bool:
+    if not validate_general_rules(letter=letter):
+        return False
+
+    if letter in guessed_letters:
+        print("The letter must not have been entered before")
+        return False
+
+    return True
+
+
+def validate_general_rules(letter: str) -> bool:
+    if len(letter) > 1:
+        print("Enter onle one symbol, please")
+        return False
+
+    if not letter.isascii():
+        print("The letter must be in Latin alphabet")
+        return False
+
+    if not letter.isalpha():
+        print("The letter must be a alphabetic letter")
+        return False
+
+    return True
+
+
+def process_user_answer() -> str:
     while True:
-        user_input = input("Do you want one more game? y/n ").lower()
+        user_input = get_user_input("Do you want one more game? y/n ")
+        is_valid = validate_user_answer(user_input)
 
-        if len(user_input) > 1:
-            print("Enter onle one symbol, please")
-            continue
+        if is_valid:
+            return user_input
 
-        if not user_input.isascii():
-            print("The letter must be in Latin alphabet")
-            continue
 
-        if not user_input.isalpha():
-            print("The letter must be a alphabetic letter")
-            continue
+def validate_user_answer(letter: str) -> bool:
+    if not validate_general_rules(letter=letter):
+        return False
 
-        if user_input not in (Answer.YES.value, Answer.NO.value):
-            print("The letter must be in `y` or `n`")
-            continue
+    if letter not in (Answer.YES.value, Answer.NO.value):
+        print("The letter must be in `y` or `n`")
+        return False
 
-        return user_input
+    return True
 
 
 def show_game_status(attempt_count: int, guessed_word: str, guessed_letters: list[str]) -> None:
