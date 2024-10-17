@@ -1,6 +1,6 @@
 import os
 
-import cui
+import console_ui as cui
 import state
 import words
 

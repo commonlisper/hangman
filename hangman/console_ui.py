@@ -1,50 +1,51 @@
-from typing import Callable
-
 import state
-from validation_exception import ValidationException
-
-
-def _handle_user_input(
-    input_message: str,
-    parser: Callable[[str], str],
-    is_valid: Callable[[str], bool],
-    parser_error: str,
-    validator_error: str,
-) -> str:
-    while True:
-        user_input = input(f"{input_message}: ")
-
-        try:
-            parsed_input = parser(user_input)
-
-            if is_valid(parsed_input):
-                return parsed_input
-            else:
-                raise ValidationException(f"{validator_error}")
-        except ValidationException as ex:
-            print(f"{ex}")
-        except Exception:
-            print(f"{parser_error}")
+from answer import Answer
 
 
 def request_user_letter(guessed_letters: list[str]) -> str:
-    return _handle_user_input(
-        "Enter your letter",
-        lambda input_line: input_line[0].lower(),
-        lambda parsed_input: parsed_input.isalpha() and parsed_input not in guessed_letters,
-        "Enter one symbol, please",
-        "The letter must be a alphabetic letter and must not have been entered before",
-    )
+    while True:
+        user_input = input("Enter your letter: ").lower()
+
+        if len(user_input) > 1:
+            print("Enter onle one symbol, please")
+            continue
+
+        if not user_input.isascii():
+            print("The letter must be in Latin alphabet")
+            continue
+
+        if not user_input.isalpha():
+            print("The letter must be a alphabetic letter")
+            continue
+
+        if user_input in guessed_letters:
+            print("The letter must not have been entered before")
+            continue
+
+        return user_input
 
 
 def request_user_answer() -> str:
-    return _handle_user_input(
-        "Do you want one more game? y/n ",
-        lambda input_line: input_line[0].lower(),
-        lambda parsed_input: parsed_input.isalpha() and parsed_input in ("y", "n"),
-        "Enter only one symbol",
-        "The symbol must be in `y` or `n`",
-    )
+    while True:
+        user_input = input("Do you want one more game? y/n ").lower()
+
+        if len(user_input) > 1:
+            print("Enter onle one symbol, please")
+            continue
+
+        if not user_input.isascii():
+            print("The letter must be in Latin alphabet")
+            continue
+
+        if not user_input.isalpha():
+            print("The letter must be a alphabetic letter")
+            continue
+
+        if user_input not in (Answer.YES.value, Answer.NO.value):
+            print("The letter must be in `y` or `n`")
+            continue
+
+        return user_input
 
 
 def show_game_status(attempt_count: int, guessed_word: str, guessed_letters: list[str]) -> None:
