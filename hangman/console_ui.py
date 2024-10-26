@@ -36,7 +36,7 @@ def validate_general_rules(letter: str) -> bool:
         return False
 
     if not letter.isalpha():
-        print("The letter must be a alphabetic letter")
+        print("The letter must be an alphabetic letter")
         return False
 
     return True
