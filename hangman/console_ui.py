@@ -44,7 +44,7 @@ def validate_general_rules(letter: str) -> bool:
 
 def process_user_answer() -> str:
     while True:
-        user_input = get_user_input("Do you want one more game? y/n ")
+        user_input = get_user_input(f"Do you want one more game? {Answer.YES.value}/{Answer.NO.value} ")
         is_valid = validate_user_answer(user_input)
 
         if is_valid:
@@ -56,7 +56,7 @@ def validate_user_answer(letter: str) -> bool:
         return False
 
     if letter not in (Answer.YES.value, Answer.NO.value):
-        print("The letter must be in `y` or `n`")
+        print(f"The letter must be in `{Answer.YES.value}` or `{Answer.NO.value}`")
         return False
 
     return True
@@ -69,8 +69,8 @@ def show_game_status(attempt_count: int, guessed_word: str, guessed_letters: lis
     print(f"{state.HANGMAN_STATE[attempt_count - 1]}\n")
 
 
-def _get_guessed_letters(target_word: str, entered_letters: list[str]) -> list[str]:
-    return [ch for ch in target_word if ch in entered_letters]
+def _get_guessed_letters(word: str, entered_letters: list[str]) -> list[str]:
+    return [letter for letter in word if letter in entered_letters]
 
 
 def show_user_statistic(
