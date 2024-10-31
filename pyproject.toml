@@ -2,7 +2,7 @@
 name = "hangman"
 version = "0.1.0"
 description = ""
-authors = ["Active Profi <atosdo@live.com>"]
+authors = ["Common Lisper <atosdo@live.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
