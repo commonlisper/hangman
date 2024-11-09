@@ -1,1 +1,1 @@
-Hangman CLI game in Python
+Hangman CLI game in Python written in procedural style
