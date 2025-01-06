@@ -1,18 +1,15 @@
-[tool.poetry]
+[project]
 name = "hangman"
 version = "0.1.0"
-description = ""
-authors = ["Common Lisper <atosdo@live.com>"]
+description = "The CLI hangman game"
+authors = [{ name = "Common Lisper", email = "atosdo@live.com" }]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.13"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.13"
+dependencies = []
 
 
-[tool.black]
+[tool.ruff]
 line-length = 120
+
+[dependency-groups]
+dev = ["ruff>=0.8.6"]
